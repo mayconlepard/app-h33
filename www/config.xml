@@ -49,15 +49,4 @@
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="http://127.0.0.1*" />
 
-    
-    <feature name="Geolocation">
-        <param name="blackberry-package" value="org.apache.cordova.geolocation.Geolocation" />
-        <param name="ios-package" value="CDVLocation" />
-    </feature>
-    <rim:permissions>
-        <rim:permit>read_geolocation</rim:permit>
-    </rim:permissions>
-    <Capabilities>
-        <Capability Name="ID_CAP_LOCATION" />
-    </Capabilities>
 </widget>
