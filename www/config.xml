@@ -49,12 +49,6 @@
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="http://127.0.0.1*" />
 
-    <gap:platform name="ios" />
-    <gap:platform name="android" />
-    <gap:platform name="webos" />
-    <gap:platform name="symbian" />
-    <gap:platform name="blackberry" />
-    <gap:platform name="winphone" />
     
     <feature name="Geolocation">
         <param name="blackberry-package" value="org.apache.cordova.geolocation.Geolocation" />
