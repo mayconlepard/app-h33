@@ -1,0 +1,105 @@
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;  }
+
+@bgcolor: #FFF;
+@width:960px;  
+@def_grid: 4;
+@vermelho: #7f3035;
+@azul: #335165;
+@cinza: #282828;
+
+.container(@width:960px) { clear:both; margin:0 auto; width:@width; margin-bottom: 10px;  line-height: 2em; }         
+
+.translate3d(@valuesx,@valuesy,@valuesz) {
+    transform:         translate3d(@valuesx,@valuesy,@valuesz);
+    -ms-transform:     translate3d(@valuesx,@valuesy,@valuesz);
+    -moz-transform:    translate3d(@valuesx,@valuesy,@valuesz);
+    -o-transform:      translate3d(@valuesx,@valuesy,@valuesz);
+    -webkit-transform: translate3d(@valuesx,@valuesy,@valuesz);
+}
+.transform(@valuesx) {
+    transform:         @valuesx;
+    -ms-transform:     @valuesx;
+    -moz-transform:    @valuesx;
+    -o-transform:      @valuesx;
+    -webkit-transform: @valuesx;
+}
+.backgroundSize(@value){
+    background-size: @value;
+    -ms-background-size: @value;
+    -moz-background-size: @value;
+    -o-background-size: @value;
+    -webkit-background-size: @value;
+}
+.transition(@value){
+    transition: @value;
+    -ms-transition: @value;
+    -moz-transition: @value;
+    -o-transition: @value;
+    -webkit-transition: @value;
+
+}
+.opacity(@opa) {
+    opacity: @opa;
+    -o-opacity: @opa;
+    -moz-opacity: @opa;
+    -khtml-opacity: @opa;
+    -webkit-opacity: @opa;
+    // filter: alpha(opacity=@opa);
+}
+.borderRadius(@top,@left,@bottom,@right) {
+    -webkit-border-radius: @top @left @bottom @right;
+    -moz-border-radius: @top @left @bottom @right;
+    border-radius: @top @left @bottom @right;
+}
+.borderRadiusAll(@border) {
+    -webkit-border-radius: @border;
+    -moz-border-radius: @border;
+    border-radius: @border;
+}
+.doGradient(@from,@to) {
+    background: @from; /* Old browsers */
+    background: -moz-linear-gradient(top,  @from 0%, @to 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@from), color-stop(100%,@to)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  @from 0%,@to 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  @from 0%,@to 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  @from 0%,@to 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  @from 0%,@to 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@from', endColorstr='@to',GradientType=0 ); /* IE6-8 */
+}
+
+.nofont { font: normal 0/0 a; }
+
+body { background: @vermelho; color: #D2B886;
+
+    .ui-page, .ui-body-c { font-family: 'solido_compactbook',Arial; }
+    .ui-body-c, .ui-overlay-c { text-shadow: none !important; }
+}
+
+#main{ height: 100%; overflow: hidden; 
+    > section { background: @azul; }
+    #tela-home { line-height: 100%; background: @vermelho; position: absolute; top: 0; left: 0; width: 100%; z-index: 10000;height: 100%; text-align: center; }
+
+    #logo { position: absolute; left: 50%; top: 50%; margin: -57px 0 0 -125px; }
+    
+    #block-top, #block-bottom { width: 5px; height: 60px; background: #dbd8d6; margin: 20px 0 20px -2px; left: 50%; box-shadow: 0 0 1px 1px #dbd8d6; position: absolute; top: 10px; }
+    #block-bottom { top: auto; bottom: 10px; }
+
+    #tela-aeroportos > div {  overflow: hidden; }
+    #tela-data > div {  overflow: hidden; }
+
+    #tela-aeroportos { color: #D2B886;
+        h1 { font-size: 60px; color: #D2B886; margin-bottom: 20px;
+            .localizar { float: right; width: 20px; height: 20px; .nofont; background: #000; }
+        }
+        #lista-aeroportos { color: #D2B886; height: 100%;
+            li { height: 50px; cursor: pointer;
+                span { display: inline-block; font-size: 2em; text-transform: uppercase; line-height: 30px; }
+                .dados { display: inline-block; float: right; text-align: right; font-size: 1.1em; }
+                .localizaca-nome { font-size: 0.6em; font-family: 'typewriter_urwregular', Arial;padding-top: 3px;  }
+            }
+        }
+    }
+}
