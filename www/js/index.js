@@ -66,7 +66,4 @@ jQuery(document).ready(function($) {
         });
     });
     
-    setTimeout(function() {
-        $('#tela-home').fadeOut();
-    },500)
 });
