@@ -88,12 +88,21 @@ body { background: @vermelho; color: #D2B886;
     #block-bottom { top: auto; bottom: 10px; }
 
     #tela-aeroportos > div {  overflow: hidden; }
-    #tela-data > div {  overflow: hidden; }
+    #tela-data {  color: #D2B886;
+        > div {  overflow: hidden; }
+
+        #data-local { font-size: 1.5em; 
+            span { font-size: 1.5em; display: block; }
+        }
+
+        #data-dados { margin-top: 20px; font-family: 'typewriter_urwregular', Arial;
+            li { height: 20px; cursor: pointer;
+                span { float: right; }
+            }
+        }
+    }
 
     #tela-aeroportos { color: #D2B886;
-        h1 { font-size: 60px; color: #D2B886; margin-bottom: 20px;
-            .localizar { float: right; width: 20px; height: 20px; .nofont; background: #000; }
-        }
         #lista-aeroportos { color: #D2B886; height: 100%;
             li { height: 50px; cursor: pointer;
                 span { display: inline-block; font-size: 2em; text-transform: uppercase; line-height: 30px; }
@@ -101,5 +110,9 @@ body { background: @vermelho; color: #D2B886;
                 .localizaca-nome { font-size: 0.6em; font-family: 'typewriter_urwregular', Arial;padding-top: 3px;  }
             }
         }
+    }
+
+    .header { padding: 10px 0; font-size: 60px; 
+        .localizar { float: right; width: 20px; height: 20px; .nofont; background: #000; margin-top: 15px; }
     }
 }
