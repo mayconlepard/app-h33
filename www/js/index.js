@@ -89,6 +89,13 @@ jQuery(document).ready(function($) {
             $('#lista-aeroportos').append(html);
         });
 
+        
+        $('#lista-aeroportos li').on('click',function(event) {
+
+            buscarDados($(this).attr('data-id'))
+            
+        });
+
     }
 
     buscarDados = function(estacao,latitude,longitude) {
@@ -150,11 +157,6 @@ jQuery(document).ready(function($) {
     $('#tela-aeroportos > div').height($(window).height())
     $('#tela-data > div').height($(window).height());
 
-    $('#lista-aeroportos li').click(function(event) {
-
-        buscarDados($(this).attr('data-id'))
-        
-    });
     $('#logo-mini').click(function(event) {
         showListaAeroportos();
     });
