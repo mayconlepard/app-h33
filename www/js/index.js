@@ -59,6 +59,8 @@ jQuery(document).ready(function($) {
 
     $('#lista-aeroportos li').click(function(event) {
 
+        alert('asdasd')
+        
         var that = this;
         $.ajax({
           url: 'http://www.h33.com.br/sync/h33/geolocation.php',
@@ -79,7 +81,9 @@ jQuery(document).ready(function($) {
         });
         
     });
-    $('.localizar').click(function(event) {
+    document.getElementById('localizar').onclick(function(){
+
+        alert('asdasd')
 
         // onSuccess Callback
         //   This method accepts a `Position` object, which contains
