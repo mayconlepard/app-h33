@@ -45,25 +45,32 @@ var app = {
 jQuery(document).ready(function($) {
     
     $( document ).on( "swipeleft", function() {
-        $.mobile.changePage("#tela-data", {
+
+        $('#tela-aeroportos').addClass('slide out reverse ').removeClass('ui-page ui-body-c ui-page-active');
+        $('#tela-data').addClass('slide in ui-page ui-body-c ui-page-active')
+
+
+        /*$.mobile.changePage("#tela-data", {
             transition: "slide",
             reverse: false
-        });
+        });*/
     });
     $( document ).on( "swiperight", function() {
-        $.mobile.changePage("#tela-aeroportos", {
+        /*$.mobile.changePage("#tela-aeroportos", {
             transition: "slide",
             reverse: true
-        });
+        });*/
+    $('#tela-aeroportos').addClass('slide in reverse ui-page ui-body-c ui-page-active');
+        $('#tela-data').addClass('slide out').removeClass('ui-page ui-body-c ui-page-active')
     });
 
     $('#tela-aeroportos > div').height($(window).height())
     $('#tela-data > div').height($(window).height())
-    $('#lista-aeroportos li').click(function(event) {
-        $.mobile.changePage("#tela-data", {
-            transition: "slide",
-            reverse: false
-        });
-    });
+    // $('#lista-aeroportos li').click(function(event) {
+    //     $.mobile.changePage("#tela-data", {
+    //         transition: "slide",
+    //         reverse: false
+    //     });
+    // });
     
 });
