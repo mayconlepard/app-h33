@@ -57,7 +57,28 @@ jQuery(document).ready(function($) {
     $('#tela-aeroportos > div').height($(window).height())
     $('#tela-data > div').height($(window).height());
 
+    $('#lista-aeroportos li').click(function(event) {
 
+        var that = this;
+        $.ajax({
+          url: 'http://www.h33.com.br/sync/h33/geolocation.php',
+          type: 'POST',
+          dataType: 'xml/html/script/json/jsonp',
+          data: { estacao : that.attr('data-id') },
+          complete: function(xhr, textStatus) {
+            
+          },
+          success: function(data, textStatus, xhr) {
+            $('#data-local').html(data);
+            $('#tela-data').addClass('right').removeClass('center')
+            $('#tela-aeroportos').addClass('center').removeClass('left')
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            //called when there is an error
+          }
+        });
+        
+    });
     $('.localizar').click(function(event) {
 
         // onSuccess Callback
@@ -83,7 +104,7 @@ jQuery(document).ready(function($) {
         }
 
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    
+
     });
 
 });
