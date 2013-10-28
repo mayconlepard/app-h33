@@ -49,7 +49,7 @@
     <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.png" width="1024" />
     <gap:splash gap:platform="winphone" src="res/screen/windows-phone/screen-portrait.jpg" />
     <access origin="http://127.0.0.1*" />
-
+    <access origin="http://www.h33.com.br" subdomains="true"/>
     <plugin name="Geolocation" value="org.apache.cordova.GeoBroker" />
     <plugin name="Geolocation" value="CDVLocation" />
     

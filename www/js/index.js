@@ -69,8 +69,9 @@ jQuery(document).ready(function($) {
           success: function(data, textStatus, xhr) {
             alert(data)
             $('#data-local').html(JSON.stringify(data));
-            $('#tela-data').addClass('right').removeClass('center')
-            $('#tela-aeroportos').addClass('center').removeClass('left')
+
+        $('#tela-data').addClass('center').removeClass('right')
+        $('#tela-aeroportos').addClass('left').removeClass('center')
           },
           error: function(xhr, textStatus, errorThrown) {
             console.log(xhr)
@@ -86,6 +87,9 @@ jQuery(document).ready(function($) {
         //   This method accepts a `Position` object, which contains
         //   the current GPS coordinates
         //
+
+        try {
+
         var onSuccess = function(position) {
             alert('Latitude: '          + position.coords.latitude          + '\n' +
                   'Longitude: '         + position.coords.longitude         + '\n' +
@@ -96,7 +100,6 @@ jQuery(document).ready(function($) {
                   'Speed: '             + position.coords.speed             + '\n' +
                   'Timestamp: '         + position.timestamp                + '\n');
         };
-
         // onError Callback receives a PositionError object
         //
         function onError(error) {
@@ -105,6 +108,9 @@ jQuery(document).ready(function($) {
         }
 
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } catch (e) {
+            alert(e)
+        }
 
     });
 
