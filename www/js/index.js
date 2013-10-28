@@ -154,8 +154,8 @@ jQuery(document).ready(function($) {
     $( document ).on( "swipeleft", showDados);
     $( document ).on( "swiperight", showListaAeroportos);
 
-    $('#tela-aeroportos > div').height($(window).height())
-    $('#tela-data > div').height($(window).height());
+    $('#tela-aeroportos > div').css('minHeight',$(window).height())
+    $('#tela-data > div').css('minHeight',$(window).height());
 
     $('#logo-mini').click(function(event) {
         showListaAeroportos();
