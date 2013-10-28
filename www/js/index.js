@@ -59,29 +59,26 @@ jQuery(document).ready(function($) {
 
     $('#lista-aeroportos li').click(function(event) {
 
-        alert('asdasd')
-        
-        var that = this;
+
+        var that = $(this);
         $.ajax({
           url: 'http://www.h33.com.br/sync/h33/geolocation.php',
           type: 'POST',
-          dataType: 'xml/html/script/json/jsonp',
+          dataType: 'json',
           data: { estacao : that.attr('data-id') },
-          complete: function(xhr, textStatus) {
-            
-          },
           success: function(data, textStatus, xhr) {
-            $('#data-local').html(data);
+            alert(data)
+            $('#data-local').html(JSON.stringify(data));
             $('#tela-data').addClass('right').removeClass('center')
             $('#tela-aeroportos').addClass('center').removeClass('left')
           },
           error: function(xhr, textStatus, errorThrown) {
-            //called when there is an error
+            console.log(xhr)
           }
         });
         
     });
-    document.getElementById('localizar').onclick(function(){
+    $('#localizar').click(function(){
 
         alert('asdasd')
 
