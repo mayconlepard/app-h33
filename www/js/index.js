@@ -46,8 +46,11 @@ jQuery(document).ready(function($) {
     
     $( document ).on( "swipeleft", function() {
 
-        $('#tela-aeroportos').addClass('slide out reverse ').removeClass('ui-page ui-body-c ui-page-active');
-        $('#tela-data').addClass('slide in ui-page ui-body-c ui-page-active')
+        $('#tela-aeroportos').addClass('active ')
+        $('#tela-data').removeClass('active')
+
+        //$('#tela-aeroportos').addClass('slide out reverse ').removeClass('ui-page ui-body-c ui-page-active');
+        //$('#tela-data').addClass('slide in ui-page ui-body-c ui-page-active')
 
 
         /*$.mobile.changePage("#tela-data", {
@@ -56,12 +59,11 @@ jQuery(document).ready(function($) {
         });*/
     });
     $( document ).on( "swiperight", function() {
-        /*$.mobile.changePage("#tela-aeroportos", {
-            transition: "slide",
-            reverse: true
-        });*/
-    $('#tela-aeroportos').addClass('slide in reverse ui-page ui-body-c ui-page-active');
-        $('#tela-data').addClass('slide out').removeClass('ui-page ui-body-c ui-page-active')
+        
+        $('#tela-data').addClass('active ')
+        $('#tela-aeroportos').removeClass('active')
+        //$('#tela-aeroportos').addClass('slide in reverse ui-page ui-body-c ui-page-active');
+      //  $('#tela-data').addClass('slide out').removeClass('ui-page ui-body-c ui-page-active')
     });
 
     $('#tela-aeroportos > div').height($(window).height())
