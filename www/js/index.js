@@ -44,74 +44,142 @@ var app = {
 
 jQuery(document).ready(function($) {
     
-    $( document ).on( "swipeleft", function() {
 
+    var lsAeroportsLoaded = false;
+
+    loadDados = function(condicoes) {
+
+        $('#weather-indicador-localidade span').html(condicoes.estacao+' - '+condicoes.estado+' ('+condicoes.codigo+')')
+        $('#data-local').html('<span>'+condicoes.codigo+'</span>'+condicoes.estacao+'<br />'+condicoes.estado)
+        $('#weather-hora span').html(condicoes.atualizacao)
+        $('#weather-pressao span').html(condicoes.pressao+'hPa')
+        $('#weather-temperatura span').html(condicoes.temperatura+'°C')
+        $('#weather-tempo span').html(condicoes.tempo_desc   )
+        $('#weather-umidade span').html(condicoes.umidade+'%')
+
+        if (condicoes.vento_dir > 338 || condicoes.vento_dir <= 23) condicoes.vento_dir = 'N';
+        else if (condicoes.vento_dir > 23 || condicoes.vento_dir <= 68) condicoes.vento_dir = 'NE';
+        else if (condicoes.vento_dir > 68 || condicoes.vento_dir <= 113) condicoes.vento_dir = 'E';
+        else if (condicoes.vento_dir > 113 || condicoes.vento_dir <= 158) condicoes.vento_dir = 'SE';
+        else if (condicoes.vento_dir > 158 || condicoes.vento_dir <= 203) condicoes.vento_dir = 'S';
+        else if (condicoes.vento_dir > 203 || condicoes.vento_dir <= 248) condicoes.vento_dir = 'SW';
+        else if (condicoes.vento_dir > 248 || condicoes.vento_dir <= 293) condicoes.vento_dir = 'W';
+        else if (condicoes.vento_dir > 293 || condicoes.vento_dir <= 338) condicoes.vento_dir = 'NW';
+
+        $('#weather-vento span').html(condicoes.vento_dir+'  Velocidade: '+condicoes.vento_int+' km/h')
+        $('#weather-visibilidade span').html(condicoes.visibilidade)
+    }
+
+    loadAeroportos = function(aeroportos) {
+
+
+        $.each(aeroportos, function(index,aeroporto) {
+            
+            var html = '<li data-id="'+aeroporto.sigla+'">'+
+                            '<span>'+aeroporto.sigla+'</span>'+
+                            '<div class="dados">'+
+                                '<div class="localizacao">'+
+                                    'Lat: '+aeroporto.latitude+' Long: '+aeroporto.longitude+
+                                '</div>'+
+                                '<div class="localizaca-nome">'+
+                                    aeroporto.nome+' / '+aeroporto.sigla+
+                                '</div>'+
+                            '</div>'+
+                        '</li>';
+            $('#lista-aeroportos').append(html);
+        });
+
+    }
+
+    buscarDados = function(estacao,latitude,longitude) {
+        
+        showDados();
+        
+        $('#tela-data').addClass('active');
+        $.ajax({
+            url: 'http://www.h33.com.br/sync/h33/geolocation.php',
+            type: 'GET',
+            dataType: 'json',
+            data: { estacao : estacao, latitude: latitude, longitude: longitude },
+            success: function(condicoes, textStatus, xhr) {
+                $('#tela-data').removeClass('active');
+                loadDados(condicoes);
+                window.localStorage.setItem('local',JSON.stringify(condicoes))
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $('#tela-data').removeClass('active');
+                console.log(xhr)
+            }
+        });
+    }
+
+    showListaAeroportos = function() {
+        $('#tela-data').addClass('right').removeClass('center')
+        $('#tela-aeroportos').addClass('center').removeClass('left');
+
+        if (!lsAeroportsLoaded && window.localStorage.getItem('aeroportos') == null) {
+            $('#tela-aeroportos').addClass('active');
+            $.ajax({
+                url: 'http://www.h33.com.br/sync/h33/aeroportos.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(aeroportos, textStatus, xhr) {
+                    $('#tela-aeroportos').removeClass('active');
+                    loadAeroportos(aeroportos);
+                    window.localStorage.setItem('aeroportos',JSON.stringify(aeroportos))
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    $('#tela-aeroportos').removeClass('active');
+                    console.log(xhr)
+                }
+            });
+        } else if (!lsAeroportsLoaded) {
+            loadAeroportos(JSON.parse(window.localStorage.getItem('aeroportos')));
+        }
+
+
+    }
+    showDados = function() {
         $('#tela-data').addClass('center').removeClass('right')
         $('#tela-aeroportos').addClass('left').removeClass('center')
-    });
-    $( document ).on( "swiperight", function() {
-        $('#tela-data').addClass('right').removeClass('center')
-        $('#tela-aeroportos').addClass('center').removeClass('left')
-    });
+    }
+
+    $( document ).on( "swipeleft", showDados);
+    $( document ).on( "swiperight", showListaAeroportos);
 
     $('#tela-aeroportos > div').height($(window).height())
     $('#tela-data > div').height($(window).height());
 
     $('#lista-aeroportos li').click(function(event) {
 
-
-        var that = $(this);
-        $.ajax({
-          url: 'http://www.h33.com.br/sync/h33/geolocation.php',
-          type: 'POST',
-          dataType: 'json',
-          data: { estacao : that.attr('data-id') },
-          success: function(data, textStatus, xhr) {
-            alert(data)
-            $('#data-local').html(JSON.stringify(data));
-
-        $('#tela-data').addClass('center').removeClass('right')
-        $('#tela-aeroportos').addClass('left').removeClass('center')
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            console.log(xhr)
-          }
-        });
+        buscarDados($(this).attr('data-id'))
         
     });
-    $('#localizar').click(function(){
-
-        alert('asdasd')
-
-        // onSuccess Callback
-        //   This method accepts a `Position` object, which contains
-        //   the current GPS coordinates
-        //
-
+    $('#logo-mini').click(function(event) {
+        showListaAeroportos();
+    });
+    $('.localizar').click(function(){
         try {
+            var onSuccess = function(position) {
+                 buscarDados('',position.coords.latitude,position.coords.longitude)
+            }
+            function onError(error) {
+                alert('code: '    + error.code    + '\n' +
+                      'message: ' + error.message + '\n');
+            }
 
-        var onSuccess = function(position) {
-            alert('Latitude: '          + position.coords.latitude          + '\n' +
-                  'Longitude: '         + position.coords.longitude         + '\n' +
-                  'Altitude: '          + position.coords.altitude          + '\n' +
-                  'Accuracy: '          + position.coords.accuracy          + '\n' +
-                  'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-                  'Heading: '           + position.coords.heading           + '\n' +
-                  'Speed: '             + position.coords.speed             + '\n' +
-                  'Timestamp: '         + position.timestamp                + '\n');
-        };
-        // onError Callback receives a PositionError object
-        //
-        function onError(error) {
-            alert('code: '    + error.code    + '\n' +
-                  'message: ' + error.message + '\n');
-        }
-
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
         } catch (e) {
             alert(e)
         }
-
     });
 
+    if (window.localStorage.getItem('local') == null) {
+        console.log('aa')
+        buscarDados('SBJV')
+        console.log('aa')
+    } else {
+        console.log(window.localStorage.getItem('local'))
+        loadDados(JSON.parse(window.localStorage.getItem('local')));
+    }
 });

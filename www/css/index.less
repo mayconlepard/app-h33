@@ -72,14 +72,14 @@
 
 .nofont { font: normal 0/0 a; }
 
-body { background: @vermelho; color: #D2B886;
+body { background: @azul; color: #D2B886;
 
     .ui-page, .ui-body-c { font-family: 'solido_compactbook',Arial; }
     .ui-body-c, .ui-overlay-c { text-shadow: none !important; }
 }
 
-#main{ height: 100%; overflow: hidden; 
-    > section { background: @azul; }
+#main { height: 100%; overflow: hidden; 
+    > section { background: @azul; padding: 10px; }
     #tela-home { line-height: 100%; background: @vermelho; position: absolute; top: 0; left: 0; width: 100%; z-index: 10000;height: 100%; text-align: center; }
 
     #logo { position: absolute; left: 50%; top: 50%; margin: -57px 0 0 -125px; }
@@ -95,16 +95,18 @@ body { background: @vermelho; color: #D2B886;
             span { font-size: 1.5em; display: block; }
         }
 
-        #data-dados { margin-top: 20px; font-family: 'typewriter_urwregular', Arial;
-            li { height: 20px; cursor: pointer;
-                span { float: right; }
+        #data-dados { margin-top: 20px; font-family: 'typewriter_urwregular', Arial; font-size: 0.8em;
+            li {  cursor: pointer; padding: 5px 0; clear: both; text-align: center;
+                span { display: block; background: rgba(255,255,255,0.1); padding: 3px 0;  font-size: 1.3em; }
+                .descricao {  margin-bottom: 3px;  }
             }
         }
     }
 
     #tela-aeroportos { color: #D2B886;
-        #lista-aeroportos { color: #D2B886; height: 100%;
+        #lista-aeroportos { color: #D2B886; height: 100%; 
             li { height: 50px; cursor: pointer;
+
                 span { display: inline-block; font-size: 2em; text-transform: uppercase; line-height: 30px; }
                 .dados { display: inline-block; float: right; text-align: right; font-size: 1.1em; }
                 .localizaca-nome { font-size: 0.6em; font-family: 'typewriter_urwregular', Arial;padding-top: 3px;  }
@@ -113,8 +115,11 @@ body { background: @vermelho; color: #D2B886;
     }
 
     .header { padding: 10px 0; font-size: 60px; 
-        .localizar { float: right; width: 20px; height: 20px; .nofont; background: #000; margin-top: 15px; }
+        .localizar { float: right; width: 31px; height: 31px; .nofont; background: url(../img/busca.png) 0 0 no-repeat; margin-top: 15px; }
     }
+
+    .loading { width: 100%; display: none; height: 100%; position: absolute; z-index: 1000; background: rgba(51, 81, 101, 0.57) url(../img/ajax-loader.gif) center center no-repeat; left: 0; top: 0; }
+    .active .loading { display: block; }
 }
 #main {
     position: absolute;
