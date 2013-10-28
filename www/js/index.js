@@ -46,15 +46,40 @@ jQuery(document).ready(function($) {
     
     $( document ).on( "swipeleft", function() {
 
-        $('#tela-data').addClass('right').removeClass('center')
-        $('#tela-aeroportos').addClass('center').removeClass('left')
-    });
-    $( document ).on( "swiperight", function() {
         $('#tela-data').addClass('center').removeClass('right')
         $('#tela-aeroportos').addClass('left').removeClass('center')
     });
+    $( document ).on( "swiperight", function() {
+        $('#tela-data').addClass('right').removeClass('center')
+        $('#tela-aeroportos').addClass('center').removeClass('left')
+    });
 
     $('#tela-aeroportos > div').height($(window).height())
-    $('#tela-data > div').height($(window).height())
+    $('#tela-data > div').height($(window).height());
+
+
+    // onSuccess Callback
+    //   This method accepts a `Position` object, which contains
+    //   the current GPS coordinates
+    //
+    var onSuccess = function(position) {
+        alert('Latitude: '          + position.coords.latitude          + '\n' +
+              'Longitude: '         + position.coords.longitude         + '\n' +
+              'Altitude: '          + position.coords.altitude          + '\n' +
+              'Accuracy: '          + position.coords.accuracy          + '\n' +
+              'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+              'Heading: '           + position.coords.heading           + '\n' +
+              'Speed: '             + position.coords.speed             + '\n' +
+              'Timestamp: '         + position.timestamp                + '\n');
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 });
