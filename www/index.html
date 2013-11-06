@@ -38,12 +38,14 @@
                         <img src="img/logo-mini.png" id="logo-mini" alt="">
                         <!-- <span class="localizar">Localizar</span> -->
                         <div id="data-local">
-                            <span>Carregando...</span>
-                            <img src="img/globo.png" id="logo-mini" alt=""> <br>
-                            --S --W<br>
-                            -- <br>
-                            -- <br>
-                            --
+                            <div id="data-sigla">Carregando...</div>
+                            <img src="img/globo.png" id="logo-mini" alt="">
+                            <div id="data-local-infos">
+                                --S --W<br>
+                                -- <br>
+                                -- <br>
+                                --
+                            </div>
                         </div>
                     </div>
                     <div class="loading"></div>
@@ -53,36 +55,6 @@
                         <p class="data-informacoes"></p>
 
                         <ul id="weather-list">
-                            <!-- <li class="weather-item">
-                                <p class="weather-imagem"><img src="img/wind.png" alt=""></p>
-                                <p class="weather-descricao">Vento</p>
-                                <p class="weather-valor">14 KT<span>/20 KT</span></p>
-                                <p class="weather-sub">Leste</p>
-                            </li>
-                            <li class="weather-item">
-                                <p class="weather-imagem"><img src="img/visibilidade.png" alt=""></p>
-                                <p class="weather-descricao">Visibilidade</p>
-                                <p class="weather-valor">> 10km</p>
-                                <p class="weather-sub"></p>
-                            </li>
-                            <li class="weather-item">
-                                <p class="weather-imagem"><img src="img/cloud.png" alt=""></p>
-                                <p class="weather-descricao">Nuvens</p>
-                                <p class="weather-valor">1300 FT</p>
-                                <p class="weather-sub">Poucas nuvens </p>
-                            </li>
-                            <li class="weather-item">
-                                <p class="weather-imagem"><img src="img/cloud.png" alt=""></p>
-                                <p class="weather-descricao">Nuvens</p>
-                                <p class="weather-valor">3000 FT</p>
-                                <p class="weather-sub">Nuvens esparsas</p>
-                            </li>
-                            <li class="weather-item">
-                                <p class="weather-imagem"><img src="img/rain.png" alt=""></p>
-                                <p class="weather-descricao">Tempo</p>
-                                <p class="weather-valor">Chuva</p>
-                                <p class="weather-sub">Leve</p>
-                            </li> -->
                         </ul>
                         <div class="clear"></div>
                     </div>
@@ -101,27 +73,39 @@
                     </ul>
                 </div>
             </section>
+
+            <footer>
+                <img src="img/lista.png" id="button-lista" alt="">
+                <img src="img/busca.png" alt=""  id="button-busca">
+                <img src="img/close.png" alt=""  id="button-fechar">
+                <div id="box-busca">
+                    <input type="search" data-role="none" placeholder="Aeroporto...">
+                </div>
+                <img src="img/gps.png" alt=""  id="button-gps">
+            </footer>
         </div>
         
         <script type="text/template" id="template-aeroporto">
             <li data-id="<%= aeroporto_sigla %>">
                 <h2 class="nome"><%= aeroporto_sigla %></h2>
                 <div class="dados">
-                    <%= nome %> <br>
-                    Joinville<%= cidade %> - <%= estado %> <br>
-                    <%= latitude_formatada %> <%= longitude_formatada %>
-                    <p class="aeroporto-metar"><%= metar %></p>
+                    <%= (sigla_aeroporto != '') ? '['+sigla_aeroporto+'] ' : '' %><%= nome %> <br>
+                    <%= cidade %> - <%= estado_sigla %> <br>
+                    <%= latitude_formatada %> <%= longitude_formatada %> <br>
+                    <span class="aeroporto-metar"><%= metar %></span>
                 </div>
             </li>
         </script>
 
         <script type="text/template" id="template-dados">
             <span><%= aeroporto_sigla %></span>
-            <img src="img/globo.png" id="logo-mini" alt=""> <br>
-            <%= latitude_formatada %> <%= longitude_formatada %> <br>
-            <%= nome %> <br>
-            Joinville<%= cidade %><br>
-            <%= estado %>
+            <div id="data-local-infos">
+                <img src="img/globo.png" id="logo-mini" alt=""> <br>
+                <%= latitude_formatada %> <%= longitude_formatada %> <br>
+                <%= nome %> <br>
+                <%= cidade %><br>
+                <%= estado %>
+            </div>
         </script>
         <script type="text/template" id="template-info">
             Emitido á <%= minutos %> min (<%= dataformatada %> UTC)

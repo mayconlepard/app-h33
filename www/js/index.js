@@ -49,6 +49,8 @@ jQuery(document).ready(function($) {
 
     loadDados = function(condicoes) {
 
+        console.log(condicoes);
+
 
         var html = _.template($('#template-dados').html(),condicoes);
         $('#data-local').html(html);
@@ -70,7 +72,7 @@ jQuery(document).ready(function($) {
         if (condicoes.texto_temperatura_atual != '') {
             var item = { img: 'temperatura', descricao: 'Temperatura', valor: condicoes.texto_temperatura_atual+'°C', valor2: '', sub: '' };
 
-            if (condicoes.texto_temperatura_orvalho != '') item.sub = 'Orvalho: '+condicoes.texto_temperatura_orvalho+'°C';
+            if (condicoes.texto_temperatura_orvalho != '') item.valor2 = '/'+condicoes.texto_temperatura_orvalho+'°C';
 
             $('#weather-list').append(_.template(_template_item,item));
         }
@@ -117,7 +119,7 @@ jQuery(document).ready(function($) {
 
 
         setTimeout(function() {
-            $('#main').height($('#tela-data').height());    
+            $('#main').height($('#tela-data').height()+110);    
         },100)
         
 
@@ -155,7 +157,10 @@ jQuery(document).ready(function($) {
 
             buscarDados($(this).attr('data-id'))
         });
-        $('#main').height($('#lista-aeroportos li').length * 300)
+        setTimeout(function() {
+            $('#main').height($('#tela-aeroportos').height()+110)    
+        },1)
+        
 
     }
 
@@ -184,10 +189,15 @@ jQuery(document).ready(function($) {
     }
 
     showListaAeroportos = function() {
+        
+        $(window).scrollTop(0);
+
         $('#tela-data').addClass('right').removeClass('center')
         $('#tela-aeroportos').addClass('center').removeClass('left');
+        $('#button-busca').show();
 
-        $(window).trigger('resize')
+        $(window).trigger('resize');
+        $('#main').addClass('active-page-aeroportos').removeClass('active-page-dados').height($('#tela-aeroportos').height()+110)    
 
         if (!lsAeroportsLoaded) {
             $('#tela-aeroportos').addClass('active');
@@ -211,20 +221,48 @@ jQuery(document).ready(function($) {
 
         $('#tela-data').addClass('center').removeClass('right')
         $('#tela-aeroportos').addClass('left').removeClass('center');
-        $('#main').height($('#tela-data').height());
+        $('#main').addClass('active-page-dados').removeClass('active-page-aeroportos').height($('#tela-data').height()+110);
+        $('#box-busca').removeClass('active');
+        $('#box-busca input').val('').trigger('keyup');
+        $('#button-fechar').hide();
+        $('#button-busca').hide();
 
     }
 
     $( document ).on( "swipeleft", showDados);
     $( document ).on( "swiperight", showListaAeroportos);
 
+
     // $('#tela-aeroportos > div').css('minHeight',$(window).height())
     // $('#tela-data > div').css('minHeight',$(window).height());
 
-    $('#logo-mini').click(function(event) {
+    $('#logo-mini,#button-lista').click(function(event) {
         showListaAeroportos();
     });
-    /*$('.localizar').click(function(){
+    $('#button-busca,#button-fechar').click(function(event) {
+        $('#box-busca').toggleClass('active');
+        $('#button-fechar,#button-busca').toggle();
+        $('#box-busca input').focus();
+    });
+    $('#box-busca input').keyup(function(event) {
+        
+        var texto = this.value.toUpperCase() ;
+
+        $('#lista-aeroportos li').each(function(index,item) {
+            
+            if (item.innerText.search(texto) < 0) {
+                $(item).hide();
+            } else {
+                $(item).show();
+            }
+
+        });
+
+    });
+    $('#button-gps').click(function(){
+
+        showDados();
+        
         try {
             var onSuccess = function(position) {
                  buscarDados('',position.coords.latitude,position.coords.longitude)
@@ -238,7 +276,7 @@ jQuery(document).ready(function($) {
         } catch (e) {
             alert(e)
         }
-    });*/
+    });
 
     if (window.localStorage.getItem('local') == null) {
         buscarDados('SBJV')
