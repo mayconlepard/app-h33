@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.phonegap.handar" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Handar 33</name>
+<widget id="com.phonegap.hangar" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Hangar 33</name>
     <description>
-        Handar 33
+        Hangar 33
     </description>
     <author email="maycon@lepard.com.br" href="http://lepard.com.br">
         Lepard Team

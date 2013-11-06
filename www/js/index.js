@@ -49,7 +49,79 @@ jQuery(document).ready(function($) {
 
     loadDados = function(condicoes) {
 
-        $('#weather-indicador-localidade span').html(condicoes.estacao+' - '+condicoes.estado+' ('+condicoes.codigo+')')
+
+        var html = _.template($('#template-dados').html(),condicoes);
+        $('#data-local').html(html);
+
+
+        var html = _.template($('#template-info').html(),condicoes);
+        $('.data-informacoes').html(html);
+
+        $('#weather-list').html('');
+
+        var _template_item = $('#template-weather-item').html();
+        if (parseInt(condicoes.texto_vento_velocidade) > 0) {
+            var item = { img: 'wind', descricao: 'Vento', valor: condicoes.texto_vento_velocidade+'KT', valor2: '', sub: condicoes.texto_vento_direcao_sigla };
+
+            if (parseInt(condicoes.texto_vento_rajada) > 0) item.valor2 = '/'+condicoes.texto_vento_rajada+'KT';
+
+            $('#weather-list').append(_.template(_template_item,item));
+        }
+        if (condicoes.texto_temperatura_atual != '') {
+            var item = { img: 'temperatura', descricao: 'Temperatura', valor: condicoes.texto_temperatura_atual+'°C', valor2: '', sub: '' };
+
+            if (condicoes.texto_temperatura_orvalho != '') item.sub = 'Orvalho: '+condicoes.texto_temperatura_orvalho+'°C';
+
+            $('#weather-list').append(_.template(_template_item,item));
+        }
+        if (condicoes.json_temporecente.length > 0) {
+            _.each(JSON.parse(condicoes.json_temporecente), function(cond) {
+
+                if (typeof cond.precipitacao != 'undefined') {
+                    var item = { img: 'rain', descricao: 'Tempo', valor: cond.precipitacao, valor2: '', sub: '' };
+
+                    if (typeof cond.intensidade != 'undefined') {
+                        item.sub = cond.intensidade;
+                    }
+                } else if (typeof cond.obscurecedor != 'undefined') {
+                    var item = { img: 'suncloud', descricao: 'Tempo', valor: cond.obscurecedor, valor2: '', sub: '' };
+                }
+
+                $('#weather-list').append(_.template(_template_item,item));
+            })
+        }
+        if (condicoes.texto_umidade != '') {
+            var item = { img: 'umidade', descricao: 'Úmidade', valor: condicoes.texto_umidade, valor2: '', sub: 'relativa' };
+
+            $('#weather-list').append(_.template(_template_item,item));
+        }
+        if (condicoes.texto_pressao != '') {
+            var item = { img: 'pressure', descricao: 'Pressão', valor: condicoes.texto_pressao, valor2: '', sub: '' };
+
+            $('#weather-list').append(_.template(_template_item,item));
+        }
+        if (condicoes.texto_visibilidade != '') {
+            var item = { img: 'visibilidade', descricao: 'Visibilidade', valor: condicoes.texto_visibilidade, valor2: '', sub: '' };
+
+            $('#weather-list').append(_.template(_template_item,item));
+        }
+        if (condicoes.json_nuvens.length > 0) {
+            _.each(JSON.parse(condicoes.json_nuvens), function(cond) {
+
+                var item = { img: 'cloud', descricao: 'Nuvens', valor: cond.descritor, valor2: '', sub: cond.sub };
+
+                $('#weather-list').append(_.template(_template_item,item));
+            })
+        }
+
+
+
+        setTimeout(function() {
+            $('#main').height($('#tela-data').height());    
+        },100)
+        
+
+        /*$('#weather-indicador-localidade span').html(condicoes.estacao+' - '+condicoes.estado+' ('+condicoes.codigo+')')
         $('#data-local').html('<span>'+condicoes.codigo+'</span>'+condicoes.estacao+'<br />'+condicoes.estado)
         $('#weather-hora span').html(condicoes.atualizacao)
         $('#weather-pressao span').html(condicoes.pressao+'hPa')
@@ -67,44 +139,35 @@ jQuery(document).ready(function($) {
         else if (condicoes.vento_dir > 293 || condicoes.vento_dir <= 338) condicoes.vento_dir = 'NW';
 
         $('#weather-vento span').html(condicoes.vento_dir+'  Velocidade: '+condicoes.vento_int+' km/h')
-        $('#weather-visibilidade span').html(condicoes.visibilidade)
+        $('#weather-visibilidade span').html(condicoes.visibilidade)*/
     }
 
     loadAeroportos = function(aeroportos) {
 
-
+        lsAeroportsLoaded = true;
         $.each(aeroportos, function(index,aeroporto) {
             
-            var html = '<li data-id="'+aeroporto.sigla+'">'+
-                            '<span>'+aeroporto.sigla+'</span>'+
-                            '<div class="dados">'+
-                                '<div class="localizacao">'+
-                                    'Lat: '+aeroporto.latitude+' Long: '+aeroporto.longitude+
-                                '</div>'+
-                                '<div class="localizaca-nome">'+
-                                    aeroporto.nome+' / '+aeroporto.sigla+
-                                '</div>'+
-                            '</div>'+
-                        '</li>';
+            var html = _.template($('#template-aeroporto').html(),aeroporto);
             $('#lista-aeroportos').append(html);
         });
-
         
         $('#lista-aeroportos li').on('click',function(event) {
 
             buscarDados($(this).attr('data-id'))
-            
         });
+        $('#main').height($('#lista-aeroportos li').length * 300)
 
     }
 
     buscarDados = function(estacao,latitude,longitude) {
         
         showDados();
+
+        $(window).scrollTop(0);
         
         $('#tela-data').addClass('active');
         $.ajax({
-            url: 'http://www.h33.com.br/sync/h33/geolocation.php',
+            url: 'http://qg.clientes.lepard.com.br/hangar33/metar/get',
             type: 'GET',
             dataType: 'json',
             data: { estacao : estacao, latitude: latitude, longitude: longitude },
@@ -124,43 +187,44 @@ jQuery(document).ready(function($) {
         $('#tela-data').addClass('right').removeClass('center')
         $('#tela-aeroportos').addClass('center').removeClass('left');
 
-        if (!lsAeroportsLoaded && window.localStorage.getItem('aeroportos') == null) {
+        $(window).trigger('resize')
+
+        if (!lsAeroportsLoaded) {
             $('#tela-aeroportos').addClass('active');
             $.ajax({
-                url: 'http://www.h33.com.br/sync/h33/aeroportos.php',
+                url: 'http://qg.clientes.lepard.com.br/hangar33/metar/get',
                 type: 'GET',
                 dataType: 'json',
                 success: function(aeroportos, textStatus, xhr) {
                     $('#tela-aeroportos').removeClass('active');
                     loadAeroportos(aeroportos);
-                    window.localStorage.setItem('aeroportos',JSON.stringify(aeroportos))
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     $('#tela-aeroportos').removeClass('active');
-                    console.log(xhr)
                 }
             });
-        } else if (!lsAeroportsLoaded) {
-            loadAeroportos(JSON.parse(window.localStorage.getItem('aeroportos')));
         }
 
 
     }
     showDados = function() {
+
         $('#tela-data').addClass('center').removeClass('right')
-        $('#tela-aeroportos').addClass('left').removeClass('center')
+        $('#tela-aeroportos').addClass('left').removeClass('center');
+        $('#main').height($('#tela-data').height());
+
     }
 
     $( document ).on( "swipeleft", showDados);
     $( document ).on( "swiperight", showListaAeroportos);
 
-    $('#tela-aeroportos > div').css('minHeight',$(window).height())
-    $('#tela-data > div').css('minHeight',$(window).height());
+    // $('#tela-aeroportos > div').css('minHeight',$(window).height())
+    // $('#tela-data > div').css('minHeight',$(window).height());
 
     $('#logo-mini').click(function(event) {
         showListaAeroportos();
     });
-    $('.localizar').click(function(){
+    /*$('.localizar').click(function(){
         try {
             var onSuccess = function(position) {
                  buscarDados('',position.coords.latitude,position.coords.longitude)
@@ -174,12 +238,10 @@ jQuery(document).ready(function($) {
         } catch (e) {
             alert(e)
         }
-    });
+    });*/
 
     if (window.localStorage.getItem('local') == null) {
-        console.log('aa')
         buscarDados('SBJV')
-        console.log('aa')
     } else {
         console.log(window.localStorage.getItem('local'))
         loadDados(JSON.parse(window.localStorage.getItem('local')));

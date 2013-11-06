@@ -8,7 +8,7 @@
 @def_grid: 4;
 @vermelho: #7f3035;
 @azul: #335165;
-@cinza: #282828;
+@cinza: #DAD8D6;
 
 .container(@width:960px) { clear:both; margin:0 auto; width:@width; margin-bottom: 10px;  line-height: 2em; }         
 
@@ -71,14 +71,15 @@
 }
 
 .nofont { font: normal 0/0 a; }
+.clear { clear: both; }
 
 body { background: @azul; color: #D2B886;
     .ui-page, .ui-body-c { font-family: 'solido_compactbook',Arial;  background: @azul; }
     .ui-body-c, .ui-overlay-c { text-shadow: none !important;  background: @azul; }
 }
 
-#main { height: 100%; overflow-x: hidden; 
-    > section { background: @azul !important; padding: 10px; }
+#main { min-height: 100%; overflow: hidden; 
+    > section { background: @azul !important; }
     #tela-home { line-height: 100%; background: @vermelho; position: absolute; top: 0; left: 0; width: 100%; z-index: 10000;height: 100%; text-align: center; }
 
     #logo { position: absolute; left: 50%; top: 50%; margin: -57px 0 0 -125px; }
@@ -86,34 +87,47 @@ body { background: @azul; color: #D2B886;
     #block-top, #block-bottom { width: 5px; height: 60px; background: #dbd8d6; margin: 20px 0 20px -2px; left: 50%; box-shadow: 0 0 1px 1px #dbd8d6; position: absolute; top: 10px; }
     #block-bottom { top: auto; bottom: 10px; }
 
-    #tela-aeroportos > div {  }
+    #tela-aeroportos > div { soverflow-x: hidden; }
     #tela-data {  color: #D2B886;
-        > div {  overflow: hidden; }
 
-        #data-local { font-size: 1.5em; 
-            span { font-size: 1.5em; display: block; }
+        .header #logo-mini { margin: 10px 0 10px; }
+
+
+        #data-local { font-size: 0.3em; font-family: 'solido_compactlight',Arial; 
+            span { font-size: 2em; display: block; }
+            img { margin: 5px 0; }
         }
 
-        #data-dados { margin-top: 20px; font-family: 'typewriter_urwregular', Arial; font-size: 0.8em;
-            li {  cursor: pointer; padding: 5px 0; clear: both; text-align: center;
-                span { display: block; background: rgba(255,255,255,0.1); padding: 3px 0;  font-size: 1.3em; }
-                .descricao {  margin-bottom: 3px;  }
-            }
+        #data-dados { margin-top: 10px; font-family: 'typewriter_urwregular', Arial; font-size: 0.7em;
+
+            .data-title { text-transform: uppercase;font-size: 3em; font-family: 'solido_compactbook',Arial; text-align: center; margin-bottom: 5px; }
+            .data-descricao { text-align: center; text-transform: uppercase; line-height: 1.4em; }
+            .data-informacoes { text-align: center; color: #FFF;text-transform: uppercase; line-height: 1.4em; margin-bottom: 0px; }
+
+
+            .weather-item { text-align: center; text-transform: uppercase; width: 33%; min-height: 100px; float: left; margin: 10px 0 10px; }
+            .weather-imagem {  text-align: center; }
+            .weather-imagem img { width: 80%; }
+            .weather-descricao, .weather-sub { font-size: 0.9em; }
+            .weather-valor { font-family: 'solido_compactlight',Arial; padding: 5px 0; font-size: 3.0em; color: #FFF; }
+            .weather-valor span { font-size: 0.5em; }
+
+
+            li:nth-child(3n+1) { clear: left; }
         }
     }
 
     #tela-aeroportos { color: #D2B886;
         #lista-aeroportos { color: #D2B886; height: 100%; 
-            li { padding: 10px 0; cursor: pointer;
-
-                span { display: inline-block; font-size: 2em; text-transform: uppercase; line-height: 30px; }
-                .dados { display: inline-block; float: right; text-align: right; font-size: 1.1em; }
-                .localizaca-nome { font-size: 0.6em; font-family: 'typewriter_urwregular', Arial;padding-top: 3px;  }
+            li { padding: 10px 10px; cursor: pointer; margin-bottom: 10px; border-bottom: 1px dotted #D2B887;
+                .nome { font-size: 2.1em; }
+                .dados {  font-family: 'typewriter_urwregular', Arial;  text-transform: uppercase; font-size: 0.7em; line-height: 1.5em; color: @cinza; }
+                 .dados p { line-height: 1.5em; margin-top: 5px; }
             }
         }
     }
 
-    .header { padding: 10px 0; font-size: 60px; 
+    .header { padding: 10px 0; font-size: 60px; text-align: center; border-bottom: 1px dotted #D2B887; text-transform: uppercase;
         .localizar { float: right; width: 31px; height: 31px; .nofont; background: url(../img/busca.png) 0 0 no-repeat; margin-top: 15px; }
     }
 
@@ -123,7 +137,6 @@ body { background: @azul; color: #D2B886;
 #main {
     position: absolute;
     width: 100%;
-    height: 100%;
 }
 
 .page {
@@ -131,23 +144,25 @@ body { background: @azul; color: #D2B886;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     -webkit-transform: translate3d(0, 0, 0);
 }
 
 .page.left {
     -webkit-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
+    height: 0;
 }
 
 .page.center {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
+    height: auto;
 }
 
 .page.right {
     -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0);
+    height: 0;
 }
 
 .page.transition {
