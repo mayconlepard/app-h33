@@ -72,6 +72,7 @@
 
 .nofont { font: normal 0/0 a; }
 .clear { clear: both; }
+.hide { display: none; }
 
 body { background: @azul; color: #D2B886; font-size: 75%;
     .ui-page, .ui-body-c { font-family: 'solido_compactbook',Arial;  background: @azul; }
@@ -112,6 +113,7 @@ body { background: @azul; color: #D2B886; font-size: 75%;
             .weather-valor { font-family: 'solido_compactlight',Arial; font-size: 5em; padding: 5px 0; color: #FFF; }
             .weather-valor span { font-size: 0.5em; }
 
+            #weather-metar { background: #FFF; color: @azul; .borderRadiusAll(10px); margin: 20px 20px 0; clear: both; padding: 5px; text-align: center; }
 
             li:nth-child(3n+1) { clear: left; }
         }
@@ -119,30 +121,62 @@ body { background: @azul; color: #D2B886; font-size: 75%;
 
     #tela-aeroportos { color: #D2B886;
         #lista-aeroportos { color: #D2B886; height: 100%; 
-            li { padding: 10px 10px; cursor: pointer; margin-bottom: 10px; border-bottom: 1px dotted #D2B887; font-size: 5em;
+            li { padding: 10px 10px; cursor: pointer; margin-bottom: 10px; border-bottom: 1px dotted #D2B887; font-size: 5em; padding-right: 50px; background: url(../img/go.png) right center no-repeat;
                 .nome {  }
                 .dados {  font-family: 'typewriter_urwregular', Arial; font-size: 0.267em; text-transform: uppercase; line-height: 1.5em; color: @cinza; }
             }
         }
     }
 
-    .loading { width: 100%; display: none; height: 100%; position: absolute; z-index: 1000; background: rgba(51, 81, 101, 0.57) url(../img/ajax-loader.gif) center center no-repeat; left: 0; top: 0; }
+    .loading { width: 100%; display: none; height: 100%; position: absolute; z-index: 1000; background: rgba(51, 81, 101, 0.57) url(../img/ajax-loader.gif) center 75px no-repeat; left: 0; top: 0; }
     .active .loading { display: block; }
 
-
+    .page-footer { text-align: center; margin: 10px 0; color: #D2B886; font-family: 'typewriter_urwregular',Arial; font-size: 1.2em;
+        a { color: #D2B886; }
+    }
     footer { position: fixed; bottom: 0; left: 0; width: 100%; height: 100px; background: @vermelho;
 
         img { height: 100%; padding: 10px; }
 
         #button-busca, #button-lista, #button-fechar { position: absolute; bottom: 0; left: 0; }
         #button-busca, #button-fechar { display: none; }
-        #button-gps { position: absolute; bottom: 0; right: 0; }
 
         #box-busca { width: 100%; padding: 20px 100px;  }
         #box-busca input { border: 1px solid @azul; width: 100%; height: 60px; font-size: 3em; color: @azul; display: none; padding: 0 10px; line-height: 60px; text-transform: uppercase; }
         #box-busca.active input { display: block; }
+
+
+
+        #button-gps { position: absolute; bottom: 0; right: 0; transition: all 1s linear;  }
+        #button-gps.active { -webkit-transform:rotate(-30deg); -webkit-animation: gpsAnimation 10s ease 1s infinite alternate; -moz-animation: gpsAnimation 10s ease 1s infinite alternate; -o-animation: gpsAnimation 10s ease 1s infinite alternate; }
     }
 }
+
+
+@-webkit-keyframes gpsAnimation {
+    0%   { -webkit-transform:rotate(-30deg); }
+    25%  { -webkit-transform:rotate(50deg);  }
+    50%  { -webkit-transform:rotate(20deg);  }
+    75%  { -webkit-transform:rotate(-100deg);}
+    100% { -webkit-transform:rotate(120deg); }
+}
+@-moz-keyframes gpsAnimation {
+    0%   { -moz-transform:rotate(-30deg); }
+    25%  { -moz-transform:rotate(50deg);  }
+    50%  { -moz-transform:rotate(20deg);  }
+    75%  { -moz-transform:rotate(-100deg);}
+    100% { -moz-transform:rotate(120deg); }
+}
+@-o-keyframes gpsAnimation {
+    0%   { -o-transform:rotate(-30deg); }
+    25%  { -o-transform:rotate(50deg);  }
+    50%  { -o-transform:rotate(20deg);  }
+    75%  { -o-transform:rotate(-100deg);}
+    100% { -o-transform:rotate(120deg); }
+}
+
+
+
 #main.active-page-dados #main footer {
     #button-lista { display: inline-block; }
     #button-busca { display: none; }

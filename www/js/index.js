@@ -61,6 +61,14 @@ jQuery(document).ready(function($) {
 
         $('#weather-list').html('');
 
+        if (condicoes.metar == '') {
+        $('#weather-metar').html('no data');
+
+            return;
+        }
+        $('#weather-metar').html(condicoes.metar);
+
+
         var _template_item = $('#template-weather-item').html();
         if (parseInt(condicoes.texto_vento_velocidade) > 0) {
             var item = { img: 'wind', descricao: 'Vento', valor: condicoes.texto_vento_velocidade+'KT', valor2: '', sub: condicoes.texto_vento_direcao_sigla };
@@ -79,11 +87,24 @@ jQuery(document).ready(function($) {
         if (condicoes.json_temporecente.length > 0) {
             _.each(JSON.parse(condicoes.json_temporecente), function(cond) {
 
+                var img = 'sun';
+
                 if (typeof cond.precipitacao != 'undefined') {
-                    var item = { img: 'rain', descricao: 'Tempo', valor: cond.precipitacao, valor2: '', sub: '' };
+
+                    if (cond.precipitacao == 'Chuva' && cond.descritor == 'Trovoada') { img = 'thunderrain' }
+                    else if (cond.precipitacao == 'Chuvisco' || cond.precipitacao == 'Chuva') { img = 'rain' }
+                    else if (cond.descritor == 'Tempestade') { img = 'thunder' }
+                    else if (cond.precipitacao == 'Sol') { img = 'sun' }
+                    else { img = 'neve-granizo' }
+
+                    var item = { img: img, descricao: 'Tempo', valor: cond.precipitacao, valor2: '', sub: '' };
 
                     if (typeof cond.intensidade != 'undefined') {
                         item.sub = cond.intensidade;
+                    }
+                    if (cond.descritor != '') {
+                        if (item.sub != '') item.sub += ' com ';
+                        item.sub += cond.descritor
                     }
                 } else if (typeof cond.obscurecedor != 'undefined') {
                     var item = { img: 'suncloud', descricao: 'Tempo', valor: cond.obscurecedor, valor2: '', sub: '' };
@@ -110,7 +131,10 @@ jQuery(document).ready(function($) {
         if (condicoes.json_nuvens.length > 0) {
             _.each(JSON.parse(condicoes.json_nuvens), function(cond) {
 
-                var item = { img: 'cloud', descricao: 'Nuvens', valor: cond.descritor, valor2: '', sub: cond.sub };
+                var img = 'cloud';
+                if (cond.sub == 'Cumulus Congestus' || cond.sub == 'Cumulonimbus') img = 'danger';
+                else if (cond.sub == 'Poucas nuvens' || cond.sub == 'Nuvens esparsas') img = 'suncloud';
+                var item = { img: img, descricao: 'Nuvens', valor: cond.descritor, valor2: '', sub: cond.sub };
 
                 $('#weather-list').append(_.template(_template_item,item));
             })
@@ -183,7 +207,7 @@ jQuery(document).ready(function($) {
             },
             error: function(xhr, textStatus, errorThrown) {
                 $('#tela-data').removeClass('active');
-                console.log(xhr)
+                alert('Problemas ao conectar com o servidor. Verifique sua conexão com a Internet.')
             }
         });
     }
@@ -211,6 +235,7 @@ jQuery(document).ready(function($) {
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     $('#tela-aeroportos').removeClass('active');
+                    alert('Problemas ao conectar com o servidor. Verifique sua conexão com a Internet.')
                 }
             });
         }
@@ -224,8 +249,10 @@ jQuery(document).ready(function($) {
         $('#main').addClass('active-page-dados').removeClass('active-page-aeroportos').height($('#tela-data').height()+110);
         $('#box-busca').removeClass('active');
         $('#box-busca input').val('').trigger('keyup');
+        $('#lista-aeroportos li').show();
         $('#button-fechar').hide();
         $('#button-busca').hide();
+        $('#main').height($('#tela-data').height()+110)  
 
     }
 
@@ -239,37 +266,49 @@ jQuery(document).ready(function($) {
     $('#logo-mini,#button-lista').click(function(event) {
         showListaAeroportos();
     });
-    $('#button-busca,#button-fechar').click(function(event) {
+    $('#button-busca').click(function(event) {
         $('#box-busca').toggleClass('active');
         $('#button-fechar,#button-busca').toggle();
         $('#box-busca input').focus();
     });
+    $('#button-fechar').click(function(event) {
+        $('#box-busca').toggleClass('active');
+        $('#button-fechar,#button-busca').toggle();
+        $('#data-local').focus();
+    });
+
     $('#box-busca input').keyup(function(event) {
         
         var texto = this.value.toUpperCase() ;
 
         $('#lista-aeroportos li').each(function(index,item) {
-            
-            if (item.innerText.search(texto) < 0) {
+                console.log($(item).find('.aeroporto-dados').text().match(texto))
+            if ($(item).find('.aeroporto-dados').text().match(texto) == null) {
                 $(item).hide();
             } else {
                 $(item).show();
             }
+
+            $('#main').height($('#tela-aeroportos').height()+110)  
 
         });
 
     });
     $('#button-gps').click(function(){
 
+
+        $('#tela-data,#button-gps').addClass('active');
+
         showDados();
         
         try {
             var onSuccess = function(position) {
-                 buscarDados('',position.coords.latitude,position.coords.longitude)
+                 buscarDados('',position.coords.latitude,position.coords.longitude);
+                $('#button-gps').removeClass('active');
             }
             function onError(error) {
-                alert('code: '    + error.code    + '\n' +
-                      'message: ' + error.message + '\n');
+                alert('Não foi possível identificar sua localização. Verifique sua conexão via GPS.');
+                $('#button-gps').removeClass('active')
             }
 
             navigator.geolocation.getCurrentPosition(onSuccess, onError);
@@ -281,7 +320,7 @@ jQuery(document).ready(function($) {
     if (window.localStorage.getItem('local') == null) {
         buscarDados('SBJV')
     } else {
-        console.log(window.localStorage.getItem('local'))
-        loadDados(JSON.parse(window.localStorage.getItem('local')));
+        var a = JSON.parse(window.localStorage.getItem('local'));
+        buscarDados(a.aeroporto_sigla)
     }
 });

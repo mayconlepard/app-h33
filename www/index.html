@@ -57,6 +57,14 @@
                         <ul id="weather-list">
                         </ul>
                         <div class="clear"></div>
+                        <div id="weather-metar"></div>
+                        <div class="clear"></div>
+                    </div>
+
+
+                    <div class="page-footer">
+                        <img src="img/logo-mini.png" id="logo-mini" alt=""><br>
+                        <a href="http://www.h33.com.br">www.h33.com.br</a>
                     </div>
                 </div>
             </section>
@@ -71,6 +79,10 @@
                     <ul id="lista-aeroportos">
                         
                     </ul>
+                    <div class="page-footer">
+                        <img src="img/logo-mini.png" id="logo-mini" alt=""><br>
+                        <a href="http://www.h33.com.br">www.h33.com.br</a>
+                    </div>
                 </div>
             </section>
 
@@ -89,9 +101,11 @@
             <li data-id="<%= aeroporto_sigla %>">
                 <h2 class="nome"><%= aeroporto_sigla %></h2>
                 <div class="dados">
-                    <%= (sigla_aeroporto != '') ? '['+sigla_aeroporto+'] ' : '' %><%= nome %> <br>
-                    <%= cidade %> - <%= estado_sigla %> <br>
-                    <%= latitude_formatada %> <%= longitude_formatada %> <br>
+                    <span class="aeroporto-dados">
+                        <%= (sigla_aeroporto != '') ? '['+sigla_aeroporto+'] ' : '' %><%= nome.toUpperCase() %> <br>
+                        <%= cidade.toUpperCase() %> - <%= estado_sigla.toUpperCase() %> <br> <span class="hide"><%= aeroporto_sigla.toUpperCase() %></span>
+                    </span>
+                        <%= latitude_formatada %> <%= longitude_formatada %> <br>
                     <span class="aeroporto-metar"><%= metar %></span>
                 </div>
             </li>
